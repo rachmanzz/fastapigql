@@ -1,6 +1,10 @@
+from orator import DatabaseManager, Schema, Model
+from dotenv import load_dotenv
+from pathlib import Path
+load_dotenv(str(Path('.') / '.env'))
 from os import getenv
-config = {
-    "default": getenv("DB_DRIVER", "postgres"),
+
+DATABASES = {
     "postgres": {
         "driver": "postgres",
         "host": getenv("PG_HOST", "localhost"),
@@ -11,3 +15,7 @@ config = {
         "port": getenv("PG_PORT", 5432)
     }
 }
+
+db = DatabaseManager(DATABASES)
+schema = Schema(db)
+Model.set_connection_resolver(db)

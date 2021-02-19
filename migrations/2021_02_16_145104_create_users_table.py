@@ -8,9 +8,12 @@ class CreateUsersTable(Migration):
         Run the migrations.
         """
         with self.schema.create('users') as table:
-            table.increments('id')
-            table.string('email')
-            table.string('password')
+            table.big_increments('id')
+            table.string('username', 50).unique().nullable()
+            table.string('email', 100).unique()
+            table.string('password').nullable()
+            table.enum('status', ['guest','partner','admin'])
+            table.boolean('is_active').default(False)
             table.timestamps()
 
     def down(self):
