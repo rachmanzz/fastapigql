@@ -1,6 +1,11 @@
-from vendor.database import Model
+from configs.database import Model
+from orator.orm import has_one, has_many
+from .account import Account
 
 
 class User(Model):
 
-    pass
+    @has_one
+    def account(self):
+        return Account
+

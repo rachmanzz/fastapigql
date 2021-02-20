@@ -1,2 +1,3 @@
-from app.application import app as application
-app = application
+
+from app import start
+app=start.app
