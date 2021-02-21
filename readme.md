@@ -57,5 +57,34 @@ git clone git@github.com:rachmanzz/fastapigql.git --depth 1
     }
     ```
     and make sure, add or edit if you have additional env variables
-    
+
+    the instalation and configuration should be finish here, but if you have any additional configuration, just do that.
+
+
+# Paths / Directories Structure
+
+```
+- app
+    - mutations
+        - UserMutate.py (example)
+    - serializers
+        - UserSerialize.py (example)
+    - __init__.py
+    - mutator.py
+    - schema.py
+    - start.py
+- configs
+    - __init__.py
+    - database.py
+- migrations
+- models
+- vendor
+- .env
+- main.py
+- requirements.txt
+```
+
+
+
+
 
