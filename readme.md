@@ -84,7 +84,11 @@ git clone git@github.com:rachmanzz/fastapigql.git --depth 1
 - requirements.txt
 ```
 
-
+- if you want to edit route path or add adddional route, just start from app/start.py. But if you feel that was good enough, you can skip this file.
+- app/schema.py, this file prefer to make query schema, so you can custom by your self
+- app/mutator.py, this file prefer to build mutation schema, there any addional file from mutations files.
+- app/mutations/yourMutate.py, you can create by your own mutation function.
+- app/serializers/yourSerialize.py, you can create by your own serialize class and function.
 
 
 
