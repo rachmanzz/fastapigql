@@ -91,4 +91,17 @@ git clone git@github.com:rachmanzz/fastapigql.git --depth 1
 - app/serializers/yourSerialize.py, you can create by your own serialize class and function.
 
 
+# Databases
+
+Orator ORM, in this project, we use orator ORM to process any SQL databse. You can read [docs](https://orator-orm.com/docs/orm.html) to see how orator work
+
+- create model and migration
+    ``` 
+        orator make:model [yourModelName] -m
+    ```
+
+# Run your Your GrapthQL Project
+    uvicorn main:app --reload
+
+
 
