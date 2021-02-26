@@ -1,18 +1,27 @@
 from configs.application import configs
 from pydantic import BaseModel
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, utils
 from passlib.context import CryptContext
-from jose import JWTError, jwt
+from jose import ExpiredSignatureError, jwt, JWTError
 from datetime import datetime, timedelta
 from typing import Optional
-from fastapi import Depends
+from fastapi import Depends, Request
 from configs.database import db
+from app.Auth import AuthBase
+from graphql import GraphQLError
 authConfig = configs['auth']
 defaultAuth = authConfig[authConfig["default"]]
 authDriver = defaultAuth['provider'][defaultAuth["driver"]]
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+class UserNotFound(Exception):
+    pass
+
+class UnkownJWTModel(Exception):
+    pass
 
 # class User(BaseModel):
 #     username: str
@@ -34,9 +43,16 @@ def hashing_password(password):
 
 
 def getUser(key, ref):
-    if authDriver["driver"] == "orm-query":
+    try: 
         return db.table(authDriver["table"]).where(key, ref).first()
-    return 0
+    except:
+        return None
+
+def getUserById(user_id: int):
+    try: 
+        return db.table(authDriver["table"]).where("id", user_id).first()
+    except:
+        return None
 
 def authenticate_user(refer: str, password_plain: str, key: str = "email"):
     user = getUser(key, refer)
@@ -59,24 +75,39 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, defaultAuth["secret_key"], algorithm=defaultAuth["algorithm"])
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+async def get_current_user(request: Request) -> Optional[AuthBase]:
+    authorization: str = request.headers.get("Authorization")
+    if not authorization:
+        return None
+    _, token = authorization.split(" ")
     try:
-        payload = jwt.decode(token, efaultAuth["secret_key"], algorithms=[defaultAuth["algorithm"]])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        token_data = TokenData(username=username)
-    except JWTError:
-        raise credentials_exception
-    user = getUser(username=token_data.username)
-    if user is None:
-        raise credentials_exception
-    return user
+        payload = jwt.decode(token, defaultAuth["secret_key"], algorithms=[defaultAuth["algorithm"]])
+        getUser = payload.get("user")
+        if getUser is None:
+            raise UnkownJWTModel()
+        user = getUserById(getUser["user_id"])
+        if not user:
+            raise UserNotFound()
+        return AuthBase(**{"user_id": user.id, "username": user.username, "email": user.email})
+    except ExpiredSignatureError as error:
+        raise HTTPException(status_code=401, detail="Signature has expired")
+    except JWTError as error:
+        raise HTTPException(status_code=401, detail="Signature invalid")
+    except UserNotFound:
+        raise HTTPException(status_code=404, detail="User not found")
+    except UnkownJWTModel:
+        raise HTTPException(status_code=401, detail="Unkown signature model")
+    except:
+        raise HTTPException(status_code=404, detail="Unkown Error")
 
-print(defaultAuth)
+
+def authenticate_require(func):
+    def wrap(*args, **kwargs):
+        _, info = args
+        if "request" in info.context and info.context["request"].state.current_user:
+            user = info.context["request"].state.current_user
+            kwargs["user"] = user
+            return func(*args, **kwargs)
+        raise GraphQLError('authenticate required')
+    return wrap
 

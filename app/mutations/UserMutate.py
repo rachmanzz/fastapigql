@@ -1,7 +1,16 @@
 import graphene
 from models.user import User
 from app.serializers.UserSerialize import UserGrapheneModel, UserGrapheneInputModel
-from vendor.auth import hashing_password
+from vendor.auth import hashing_password, authenticate_user, create_access_token
+from typing import Optional
+from pydantic import BaseModel
+from app.Auth import AuthBase
+
+class UserInfo(BaseModel):
+    id: int
+    username: Optional[str] = None
+    email: Optional[str] = None
+
 class CreateUser(graphene.Mutation):
     class Arguments:
         user_details = UserGrapheneInputModel()
@@ -28,6 +37,27 @@ class DeleteUserInput(graphene.InputObjectType):
 
 class UserStatus(graphene.ObjectType):
     ok = graphene.Boolean()
+
+class UserLoginStatus(graphene.ObjectType):
+    token = graphene.String()
+    status = graphene.Boolean()
+
+
+class UserLogin(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+        password = graphene.String()
+    Output = UserLoginStatus
+
+    @staticmethod
+    def mutate(parent, info, email, password):
+        user = authenticate_user(email, password)
+        if not user:
+            print("there not user")
+            return UserLoginStatus(token="", status=False)
+        token = create_access_token({"user": {"user_id": user.id}})
+        return UserLoginStatus(token=token, status=False)
+    
 
 class DelateUser(graphene.Mutation):
     class Arguments:
