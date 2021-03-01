@@ -54,8 +54,7 @@ class UserLogin(graphene.Mutation):
     def mutate(parent, info, email, password):
         user = authenticate_user(email, password)
         if not user:
-            print("there not user")
-            return UserLoginStatus(token="", status=False)
+            raise GraphQLError("User not found")
         token = create_access_token({"user": {"user_id": user.id}})
         return UserLoginStatus(token=token, status=False)
     
