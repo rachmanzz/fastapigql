@@ -5,6 +5,7 @@ from vendor.auth import hashing_password, authenticate_user, create_access_token
 from typing import Optional
 from pydantic import BaseModel
 from app.Auth import AuthBase
+from graphql import GraphQLError
 
 class UserInfo(BaseModel):
     id: int
@@ -29,7 +30,7 @@ class CreateUser(graphene.Mutation):
             user.save()
             return user
         except:
-            return UserGrapheneModel(username=None, email="rachman.sd@gmail.com")
+            raise GraphQLError("Failed")
 
 
 class DeleteUserInput(graphene.InputObjectType):
