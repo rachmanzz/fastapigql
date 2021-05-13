@@ -12,8 +12,6 @@ class CreateUsersTable(Migration):
             table.string('username', 50).unique().nullable()
             table.string('email', 100).unique()
             table.string('password').nullable()
-            table.enum('status', ['guest','partner','admin'])
-            table.boolean('is_active').default(False)
             table.timestamps()
 
     def down(self):
