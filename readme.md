@@ -1,14 +1,13 @@
 # How to Install ?
 
-1. Download from repository
-``` 
-git clone git@github.com:rachmanzz/fastapigql.git --depth 1
-```
-2. install virtualenv
+1. install virtualenv
     - [pip install virtualenv](https://pypi.org/project/virtualenv/)
     - enter your root path of project
     - virtualenv -p python[version] [venv path/dir name]
     - source [venv path/dir name]/bin/activate
+    - pip install fastql-packages
+    - fastql create [projectname]
+    - cd [projectname]
     - pip install -r requirements.txt
 
     note:
