@@ -5,6 +5,8 @@ from graphql.execution.executors.asyncio import AsyncioExecutor
 from starlette.datastructures import URL
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastql_packages.lib import req_auth, request_url
+
 from app.schema import Query
 from app.mutator import Mutation
 from app.Auth import AuthBase
@@ -36,10 +38,8 @@ graphql_app = GraphQLApp(schema=schema, executor_class=AsyncioExecutor)
 
 @app.get('/graphql')
 async def graphql(request: Request):
-    request._url = URL('/graphql')
-    return await graphql_app.handle_graphql(request=request)
+    return await request_url(request, graphql_app)
 
 @app.post('/graphql')
-async def graphql(request: Request, current_user: AuthBase = Depends(get_current_user)):
-    request.state.current_user = current_user
-    return await graphql_app.handle_graphql(request=request)
+async def graphql_post(request: Request, auth: AuthBase = Depends(get_current_user)):
+    return await req_auth(request, graphql_app, auth)

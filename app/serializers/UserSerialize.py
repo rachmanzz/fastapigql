@@ -12,15 +12,14 @@ class UserModel(BaseModel):
     status: str
     is_active: bool
     password: str
-    account: Optional[AccountModel]
 
 
 class UserGrapheneInputModel(PydanticInputObjectType):
     class Meta:
         model = UserModel
-        exclude_fields = ('id', 'account', 'status', 'is_active')
+        exclude_fields = ('id', 'status', 'is_active')
 
 class UserGrapheneModel(PydanticObjectType):
     class Meta:
         model = UserModel
-        xclude_fields = ('password', 'account')
+        xclude_fields = ('password',)
