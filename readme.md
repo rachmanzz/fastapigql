@@ -2,13 +2,17 @@
 
 1. install virtualenv
     - [pip install virtualenv](https://pypi.org/project/virtualenv/)
+2. create project direactory 
     - enter your root path of project
     - virtualenv -p python[version] [venv path/dir name]
     - source [venv path/dir name]/bin/activate
+3. install fastql packages
     - pip install fastql-packages
+4. create new project
     - fastql create [projectname]
-    - cd [projectname]
-    - pip install -r requirements.txt
+5. run your project
+    - enter to project directory and run this commandline
+    - `fastql run-server --reload`
 
     note:
 
