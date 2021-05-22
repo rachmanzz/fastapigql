@@ -1,5 +1,7 @@
 # How to Install ?
 
+This project running well on python >=3.6
+
 1. install virtualenv
     - [pip install virtualenv](https://pypi.org/project/virtualenv/)
 2. create project direactory 
