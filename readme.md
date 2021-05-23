@@ -1,6 +1,8 @@
 # How to Install ?
 
-This project running well on python >=3.6
+This project running well on python >=3.6.
+
+This Project is under development and not documented well, some file may missing or need create manually
 
 1. install virtualenv
     - [pip install virtualenv](https://pypi.org/project/virtualenv/)
@@ -34,7 +36,6 @@ This project running well on python >=3.6
     - database.py
 - migrations
 - models
-- vendor
 - .env
 - main.py
 ```
