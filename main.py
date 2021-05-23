@@ -1,1 +1,1 @@
-from vendor import app
+from app.start import app
