@@ -49,7 +49,7 @@ This Project is under development and not documented well, some file may missing
 
 # Databases
 
-In this project, we use orator ORM to process any SQL databse. You can read [docs](https://orator-orm.com/docs/orm.html) to see how orator work. but in our case, we have refactory some resources so that make litte change:
+In this project, we use orator ORM to process any SQL database. You can read [docs](https://orator-orm.com/docs/orm.html) to see how orator work:
 
 - make model
     ``` 
@@ -73,6 +73,16 @@ In this project, we use orator ORM to process any SQL databse. You can read [doc
     fastql make serialize --name [serializeName]
     ```
 
+- make mutation
+    ``` 
+    fastql make mutation --name [mutationName]
+    ```
+
+    option:
+    - `-d` or `--depend`: serialize file name
+    - `--arg-key`: define argument that referance to your input serialize file
+
+
 # Migration
 
 - migration commandline
@@ -82,7 +92,7 @@ In this project, we use orator ORM to process any SQL databse. You can read [doc
     - `fastql migrate --reset`
     - `fastql migrate --status`
 
-# Run your Your GrapthQL Project
+# Run your Your GraphQL Project
     
 `fastql run-server`
 
