@@ -49,7 +49,16 @@ This Project is under development and not documented well, some file may missing
 
 # Databases
 
-In this project, we use orator ORM to process any SQL database. You can read [docs](https://orator-orm.com/docs/orm.html) to see how orator work:
+In this project, we use orator ORM to process any SQL database. You can read [docs](https://orator-orm.com/docs/orm.html) to see how orator work.
+
+# CommandLine
+
+Here several command line that you can use to make a project.
+
+- create new project
+    ```
+    fastql create [projectname]
+    ```
 
 - make model
     ``` 
@@ -60,6 +69,7 @@ In this project, we use orator ORM to process any SQL database. You can read [do
     - `-m` or `--migration`: auto create migration
     - `-s` or `--serialize`: auto create serialize file
     - `-a` or `--all`: auto migration and serialize file
+    
 - make migration
     ``` 
     fastql make migration --name [migrationName]
